@@ -13,3 +13,5 @@ export * from './shipping.schema';
 export * from './disputes.schema';
 export * from './reviews.schema';
 export * from './revenue.schema';
+export * from './conversations.schema';
+export * from './messages.schema';

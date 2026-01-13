@@ -31,3 +31,6 @@ npm-debug.log*
 
 # Test
 coverage/
+
+#docs 
+docs/CHAT_SYSTEM.md
