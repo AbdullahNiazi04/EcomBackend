@@ -1,5 +1,7 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
+import { AuthModule } from '@thallesp/nestjs-better-auth';
+import { auth } from './lib/auth';
 import { DatabaseModule } from './database/database.module';
 import { UsersModule } from './modules/users/users.module';
 import { CompaniesModule } from './modules/companies/companies.module';
@@ -18,6 +20,8 @@ import { ChatModule } from './modules/chat/chat.module';
       isGlobal: true,
       envFilePath: '.env',
     }),
+    // Better Auth Module - provides global AuthGuard
+    AuthModule.forRoot({ auth }),
     DatabaseModule,
     UsersModule,
     CompaniesModule,

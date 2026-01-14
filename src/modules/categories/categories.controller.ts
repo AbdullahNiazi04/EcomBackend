@@ -1,7 +1,9 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, HttpCode, HttpStatus } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, HttpCode, HttpStatus, UseGuards } from '@nestjs/common';
 import { ApiTags, ApiOperation } from '@nestjs/swagger';
+import { AllowAnonymous } from '@thallesp/nestjs-better-auth';
 import { CategoriesService } from './categories.service';
 import { CreateCategoryDto, UpdateCategoryDto } from './dto';
+import { RolesGuard, Roles } from '../../common';
 
 @ApiTags('Categories')
 @Controller('categories')
@@ -9,44 +11,54 @@ export class CategoriesController {
     constructor(private readonly categoriesService: CategoriesService) { }
 
     @Post()
-    @ApiOperation({ summary: 'Create a new category' })
+    @UseGuards(RolesGuard)
+    @Roles('Admin')
+    @ApiOperation({ summary: 'Create a new category (Admin only)' })
     create(@Body() createCategoryDto: CreateCategoryDto) {
         return this.categoriesService.create(createCategoryDto);
     }
 
     @Get()
-    @ApiOperation({ summary: 'Get all categories' })
+    @AllowAnonymous()
+    @ApiOperation({ summary: 'Get all categories (Public)' })
     findAll() {
         return this.categoriesService.findAll();
     }
 
     @Get('roots')
-    @ApiOperation({ summary: 'Get root categories' })
+    @AllowAnonymous()
+    @ApiOperation({ summary: 'Get root categories (Public)' })
     findRoots() {
         return this.categoriesService.findRootCategories();
     }
 
     @Get(':id')
-    @ApiOperation({ summary: 'Get category by ID' })
+    @AllowAnonymous()
+    @ApiOperation({ summary: 'Get category by ID (Public)' })
     findOne(@Param('id') id: string) {
         return this.categoriesService.findOne(id);
     }
 
     @Get(':id/subcategories')
-    @ApiOperation({ summary: 'Get subcategories' })
+    @AllowAnonymous()
+    @ApiOperation({ summary: 'Get subcategories (Public)' })
     findSubcategories(@Param('id') id: string) {
         return this.categoriesService.findSubcategories(id);
     }
 
     @Patch(':id')
-    @ApiOperation({ summary: 'Update category' })
+    @UseGuards(RolesGuard)
+    @Roles('Admin')
+    @ApiOperation({ summary: 'Update category (Admin only)' })
     update(@Param('id') id: string, @Body() updateCategoryDto: UpdateCategoryDto) {
         return this.categoriesService.update(id, updateCategoryDto);
     }
 
     @Delete(':id')
+    @UseGuards(RolesGuard)
+    @Roles('Admin')
     @HttpCode(HttpStatus.NO_CONTENT)
-    @ApiOperation({ summary: 'Delete category' })
+    @ApiOperation({ summary: 'Delete category (Admin only)' })
     remove(@Param('id') id: string) {
         return this.categoriesService.remove(id);
     }

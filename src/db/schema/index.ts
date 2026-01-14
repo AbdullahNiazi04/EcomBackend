@@ -15,3 +15,6 @@ export * from './reviews.schema';
 export * from './revenue.schema';
 export * from './conversations.schema';
 export * from './messages.schema';
+export * from './sessions.schema';
+export * from './accounts.schema';
+export * from './verifications.schema';
