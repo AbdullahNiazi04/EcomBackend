@@ -57,6 +57,7 @@ async function bootstrap() {
 
   console.log(`Nizron Marketplace API running on: http://localhost:${port}`);
   console.log(`Swagger UI available at: http://localhost:${port}/api`);
+  console.log('--- SERVER STARTED SUCCESSFULLY (Fresh Build) ---');
 }
 
 bootstrap();

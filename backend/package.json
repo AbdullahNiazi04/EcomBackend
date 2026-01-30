@@ -1,12 +1,12 @@
 {
   "name": "Ecom",
   "version": "0.0.1",
-  "description": "",
+  "description": "Nizron Ecom Backend - Cache Bust 1",
   "author": "",
   "private": true,
   "license": "UNLICENSED",
   "scripts": {
-    "build": "nest build",
+    "build": "rm -rf node_modules/@thallesp && nest build",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
     "start": "nest start",
     "start:dev": "nest start --watch",
