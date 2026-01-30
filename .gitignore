@@ -1,3 +1,6 @@
+# Frontend (Ignored in this backend repo)
+frontend/
+
 # Environment
 .env
 .env.local
@@ -31,8 +34,3 @@ npm-debug.log*
 
 # Test
 coverage/
-
-# #docs 
-# docs/CHAT_SYSTEM.md
-# backend_explained.md
-# docs
