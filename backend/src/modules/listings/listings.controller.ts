@@ -1,10 +1,8 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete, Query, HttpCode, HttpStatus, UseGuards } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiQuery } from '@nestjs/swagger';
-import { AllowAnonymous, Session } from '@thallesp/nestjs-better-auth';
-import type { UserSession } from '@thallesp/nestjs-better-auth';
 import { ListingsService } from './listings.service';
 import { CreateListingDto, UpdateListingDto } from './dto';
-import { RolesGuard, Roles } from '../../common';
+import { RolesGuard, Roles, Public, UserSession } from '../../common';
 
 @ApiTags('Listings')
 @Controller('listings')
@@ -15,14 +13,14 @@ export class ListingsController {
     @UseGuards(RolesGuard)
     @Roles('Seller', 'Admin')
     @ApiOperation({ summary: 'Create a new listing (Seller/Admin only)' })
-    create(@Body() createListingDto: CreateListingDto, @Session() session: UserSession) {
+    create(@Body() createListingDto: CreateListingDto, @UserSession() session: any) {
         // Set seller ID from authenticated user
         createListingDto.sellerId = session.user.id;
         return this.listingsService.create(createListingDto);
     }
 
     @Get()
-    @AllowAnonymous()
+    @Public()
     @ApiOperation({ summary: 'Get all listings (Public)' })
     @ApiQuery({ name: 'limit', required: false })
     @ApiQuery({ name: 'offset', required: false })
@@ -31,7 +29,7 @@ export class ListingsController {
     }
 
     @Get('search')
-    @AllowAnonymous()
+    @Public()
     @ApiOperation({ summary: 'Search listings (Public)' })
     @ApiQuery({ name: 'q', required: true })
     search(@Query('q') query: string) {
@@ -39,21 +37,21 @@ export class ListingsController {
     }
 
     @Get('seller/:sellerId')
-    @AllowAnonymous()
+    @Public()
     @ApiOperation({ summary: 'Get listings by seller (Public)' })
     findBySeller(@Param('sellerId') sellerId: string) {
         return this.listingsService.findBySeller(sellerId);
     }
 
     @Get('category/:categoryId')
-    @AllowAnonymous()
+    @Public()
     @ApiOperation({ summary: 'Get listings by category (Public)' })
     findByCategory(@Param('categoryId') categoryId: string) {
         return this.listingsService.findByCategory(categoryId);
     }
 
     @Get(':id')
-    @AllowAnonymous()
+    @Public()
     @ApiOperation({ summary: 'Get listing by ID (Public)' })
     findOne(@Param('id') id: string) {
         return this.listingsService.findOne(id);

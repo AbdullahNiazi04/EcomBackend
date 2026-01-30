@@ -1,9 +1,8 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete, HttpCode, HttpStatus, UseGuards } from '@nestjs/common';
 import { ApiTags, ApiOperation } from '@nestjs/swagger';
-import { AllowAnonymous } from '@thallesp/nestjs-better-auth';
 import { CategoriesService } from './categories.service';
 import { CreateCategoryDto, UpdateCategoryDto } from './dto';
-import { RolesGuard, Roles } from '../../common';
+import { RolesGuard, Roles, Public } from '../../common';
 
 @ApiTags('Categories')
 @Controller('categories')
@@ -19,28 +18,28 @@ export class CategoriesController {
     }
 
     @Get()
-    @AllowAnonymous()
+    @Public()
     @ApiOperation({ summary: 'Get all categories (Public)' })
     findAll() {
         return this.categoriesService.findAll();
     }
 
     @Get('roots')
-    @AllowAnonymous()
+    @Public()
     @ApiOperation({ summary: 'Get root categories (Public)' })
     findRoots() {
         return this.categoriesService.findRootCategories();
     }
 
     @Get(':id')
-    @AllowAnonymous()
+    @Public()
     @ApiOperation({ summary: 'Get category by ID (Public)' })
     findOne(@Param('id') id: string) {
         return this.categoriesService.findOne(id);
     }
 
     @Get(':id/subcategories')
-    @AllowAnonymous()
+    @Public()
     @ApiOperation({ summary: 'Get subcategories (Public)' })
     findSubcategories(@Param('id') id: string) {
         return this.categoriesService.findSubcategories(id);
