@@ -29,7 +29,7 @@ export const auth = betterAuth({
     baseURL: process.env.BETTER_AUTH_URL || 'http://localhost:3000',
 
     // Secret for signing tokens (must be 32+ chars)
-    secret: process.env.BETTER_AUTH_SECRET,
+    secret: process.env.BETTER_AUTH_SECRET || 'temporary_dev_secret_MUST_BE_CHANGED_IN_PROD_12345',
 
     // Email and Password authentication
     emailAndPassword: {
