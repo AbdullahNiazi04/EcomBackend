@@ -1,22 +1,15 @@
 import { betterAuth, APIError } from 'better-auth';
 import { drizzleAdapter } from 'better-auth/adapters/drizzle';
-import Database from 'better-sqlite3';
-import { drizzle } from 'drizzle-orm/better-sqlite3';
+import { drizzle } from 'drizzle-orm/node-postgres';
+import * as pg from 'pg';
+const { Pool } = pg;
 import * as schema from '../db/schema';
-import * as path from 'path';
-import * as fs from 'fs';
 
-// Ensure data directory exists
-const dataDir = path.join(process.cwd(), 'data');
-if (!fs.existsSync(dataDir)) {
-    fs.mkdirSync(dataDir, { recursive: true });
-}
-
-// Create SQLite connection for Better Auth
-const dbPath = process.env.DATABASE_URL || './data/database.sqlite';
-const sqlite = new Database(dbPath);
-sqlite.pragma('foreign_keys = ON');
-const db = drizzle(sqlite, { schema });
+// Create Postgres connection for Better Auth
+const pool = new Pool({
+    connectionString: process.env.DATABASE_URL,
+});
+const db = drizzle(pool, { schema });
 
 /**
  * Better Auth Instance
@@ -24,12 +17,12 @@ const db = drizzle(sqlite, { schema });
  * Configuration for authentication in Nizron Marketplace
  * - Email/Password authentication enabled
  * - Session-based auth with database storage
- * - Drizzle ORM adapter for SQLite
+ * - Drizzle ORM adapter for PostgreSQL
  */
 export const auth = betterAuth({
     // Database configuration using Drizzle adapter
     database: drizzleAdapter(db, {
-        provider: 'sqlite',
+        provider: 'pg',
     }),
 
     // Base URL for auth routes
